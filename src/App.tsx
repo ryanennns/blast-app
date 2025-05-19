@@ -1,10 +1,11 @@
 import "./App.css";
+import FileDropper from "./components/FileDropper.tsx";
 
 function App() {
   return (
     <>
       <div>
-        <p className="text-3xl font-bold underline">Snickers</p>
+        <FileDropper />
       </div>
     </>
   );
