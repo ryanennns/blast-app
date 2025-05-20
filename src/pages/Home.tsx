@@ -18,7 +18,7 @@ export function Home() {
     <>
       <FileDropper onApiResponse={handleApiResponse} />
 
-      <Scoreboard data={scoreboard} />
+      {Object.values(scoreboard).length > 0 && <Scoreboard data={scoreboard} />}
     </>
   );
 }
