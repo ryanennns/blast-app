@@ -1,12 +1,10 @@
 import "./App.css";
-import FileDropper from "./components/FileDropper.tsx";
+import { Home } from "./pages/Home.tsx";
 
 function App() {
   return (
     <>
-      <div>
-        <FileDropper />
-      </div>
+      <Home />
     </>
   );
 }

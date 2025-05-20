@@ -1,11 +1,13 @@
 import { useState } from "react";
-import type { DragEvent } from 'react';
+import type { DragEvent } from "react";
 
+interface Props {
+  onApiResponse: (response: unknown) => void;
+}
 
-export default function FileDropper() {
+export default function FileDropper({ onApiResponse }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
-  const [response, setResponse] = useState<any>(null);
   const [uploading, setUploading] = useState(false);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -32,9 +34,9 @@ export default function FileDropper() {
         body: formData,
       });
       const data = await response.json();
-      setResponse(data);
+      onApiResponse(data);
     } catch (error: unknown) {
-        console.log(error);
+      console.log(error);
       alert("Failed to upload log file");
     } finally {
       setUploading(false);
@@ -46,12 +48,16 @@ export default function FileDropper() {
       <div
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
-        className="border-2 border-dashed border-gray-400 rounded-lg p-8 text-center cursor-pointer"
+        className="border-2 border-dashed border-gray-400 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer"
       >
         {preview ? (
-          <p className="text-green-600">Selected: {preview}</p>
+          <p className="text-green-600 dark:text-green-400">
+            Selected: <span className="font-mono">{preview}</span>
+          </p>
         ) : (
-          <p className="text-gray-500">Drag & drop a `.log` file here</p>
+          <p className="text-gray-500 dark:text-gray-400">
+            Drag & drop a `.log` file here
+          </p>
         )}
       </div>
 
@@ -59,16 +65,10 @@ export default function FileDropper() {
         <button
           onClick={handleUpload}
           disabled={uploading}
-          className="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="mt-4 w-full bg-blue-600 dark:bg-blue-500 text-white dark:text-gray-900 px-4 py-2 rounded hover:bg-blue-700 dark:hover:bg-blue-600"
         >
           {uploading ? "Uploading..." : "Upload & Parse"}
         </button>
-      )}
-
-      {response && (
-        <pre className="mt-4 bg-gray-100 p-4 text-  sm rounded overflow-auto max-h-96 bg-gray-900">
-          {JSON.stringify(response, null, 2)}
-        </pre>
       )}
     </div>
   );
