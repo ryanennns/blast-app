@@ -1,16 +1,17 @@
-import type { Match } from "../../types/core.ts";
+import type { Match } from "../types/core.ts";
 
 interface MatchCardProps {
   match: Match;
+  onClick: () => void;
 }
 
-export function MatchCard({ match }: MatchCardProps) {
+export function MatchCard({ match, onClick }: MatchCardProps) {
   const isTeamAWinner = match.winner === match.team_a;
 
   return (
     <div
       className="hover:bg-gray-100 bg-white rounded-lg shadow-md hover:shadow-lg border border-gray-200 p-6 max-w-md transition-all duration-200 ease-in-out"
-      onClick={() => console.log(`Clicked on match: ${match.id}`)}
+      onClick={onClick}
     >
       <div className="text-center mb-4">
         <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">

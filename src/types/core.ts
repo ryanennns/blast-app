@@ -8,6 +8,25 @@ export interface Match {
   winner: string;
 }
 
+export interface ScoreboardRow {
+  player: string;
+  team: string;
+  kills: number;
+  deaths: number;
+  assists: number;
+  flashAssists: number;
+}
+
+export interface Scoreboard {
+  id: string;
+  matchId: string;
+  scoreboardRows: ScoreboardRow[];
+}
+
 export interface UploadApiResponse {
   match: Match;
+}
+
+export interface ScoreboardApiResponse {
+  scoreboard: Scoreboard;
 }

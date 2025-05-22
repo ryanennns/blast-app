@@ -2,12 +2,13 @@ import FileDropper from "../components/FileDropper.tsx";
 import { useMount } from "react-use";
 import { useState } from "react";
 import type { Match, UploadApiResponse } from "../types/core.ts";
-import { MatchCard } from "../components/MatchCard/MatchCard.tsx";
-import { Footer } from "../components/Footer.tsx";
+import { MatchCard } from "../components/MatchCard.tsx";
 import { API_BASE_URL } from "../const.ts";
+import { MatchModal } from "../components/MatchModal.tsx";
 
 export function Home() {
   const [matchesData, setMatchesData] = useState<Match[]>([]);
+  const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   const handleApiResponse = (response: UploadApiResponse) => {
     const newMatch = response.match;
@@ -40,12 +41,24 @@ export function Home() {
 
           <div className="p-2 flex flex-wrap gap-4 justify-center">
             {matchesData.map((match) => (
-              <MatchCard key={match.id} match={match} />
+              <MatchCard
+                key={match.id}
+                match={match}
+                onClick={() => setSelectedMatch(match)}
+              />
             ))}
           </div>
         </div>
 
-        <Footer />
+        {/*<Footer />*/}
+
+        {selectedMatch && (
+          <MatchModal
+            match={selectedMatch}
+            open={!!selectedMatch}
+            onClose={() => setSelectedMatch(null)}
+          />
+        )}
       </div>
     </>
   );
