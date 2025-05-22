@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Round } from "../types/core.ts";
-import {RoundDataContainer} from "./RoundDataContainer.tsx";
+import { RoundDataContainer } from "./RoundDataContainer.tsx";
 
 interface Props {
   rounds: Round[];
@@ -75,7 +75,10 @@ export function MatchTimeline({ rounds }: Props) {
       {!selectedRound && secondHalf.length > 0 && renderRow(secondHalf)}
 
       {selectedRound && (
-        <RoundDataContainer  round={selectedRound} onExit={() => setSelectedRoundId(null)}/>
+        <RoundDataContainer
+          round={selectedRound}
+          onExit={() => setSelectedRoundId(null)}
+        />
       )}
     </div>
   );

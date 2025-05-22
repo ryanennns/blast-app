@@ -1,11 +1,11 @@
 import { X, Trophy, MapPin } from "lucide-react";
 import { useMount } from "react-use";
-import { API_BASE_URL } from "../const.ts";
 import { useMemo, useState } from "react";
 import type { Round, Scoreboard } from "../types/core.ts";
 import { ScoreboardTable } from "./ScoreboardTable.tsx";
 import { ToggleButton } from "./ToggleButton.tsx";
 import { MatchTimeline } from "./MatchTimeline.tsx";
+import { getMatchRounds, getMatchScoreboard } from "../services/ApiService.ts";
 
 interface Match {
   id: string;
@@ -54,18 +54,17 @@ export function MatchModal({ match, open, onClose }: Props) {
   const [activeTab, setActiveTab] = useState("scoreboard");
 
   useMount(async () => {
-    const scoreboardResponse = await fetch(
-      `${API_BASE_URL}/matches/${match.id}/scoreboard`,
-    );
-    const json = await scoreboardResponse.json();
-    setScoreboard(json.scoreboard);
+    const scoreboard = await getMatchScoreboard(match.id);
+    const rounds = await getMatchRounds(match.id);
 
-    const roundsResponse = await fetch(
-      `${API_BASE_URL}/matches/${match.id}/rounds`,
-    );
+    if (scoreboard === undefined || rounds === undefined) {
+      // show an error here
 
-    const roundsJson = await roundsResponse.json();
-    setRounds(roundsJson.rounds);
+      return;
+    }
+
+    setScoreboard(scoreboard);
+    setRounds(rounds);
   });
 
   if (!open) {
