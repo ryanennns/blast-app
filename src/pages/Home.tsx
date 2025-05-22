@@ -1,20 +1,23 @@
 import FileDropper from "../components/FileDropper.tsx";
 import { useMount } from "react-use";
 import { useState } from "react";
-import type { Match } from "../types/core.ts";
+import type { Match, UploadApiResponse } from "../types/core.ts";
 import { MatchCard } from "../components/MatchCard/MatchCard.tsx";
 import { Footer } from "../components/Footer.tsx";
+import { API_BASE_URL } from "../const.ts";
 
 export function Home() {
   const [matchesData, setMatchesData] = useState<Match[]>([]);
 
-  const handleApiResponse = (response: unknown) => {
-    console.log(response);
+  const handleApiResponse = (response: UploadApiResponse) => {
+    const newMatch = response.match;
+    setMatchesData((prevMatches) => [...prevMatches, newMatch]);
+    console.log("New match added:", newMatch);
   };
 
   useMount(() => {
     const fetchMatches = async () => {
-      const response = await fetch("http://127.0.0.1:3900/matches");
+      const response = await fetch(`${API_BASE_URL}/matches`);
       const data = await response.json();
       setMatchesData(data.matches);
       console.log(data);
@@ -32,10 +35,10 @@ export function Home() {
               Welcome to CSLogger
             </h2>
             <h4>A Counter-Strike log parser</h4>
+            <FileDropper onApiResponse={handleApiResponse} />
           </div>
-          <FileDropper onApiResponse={handleApiResponse} />
 
-          <div className="p-2 flex gap-4">
+          <div className="p-2 flex flex-wrap gap-4 justify-center">
             {matchesData.map((match) => (
               <MatchCard key={match.id} match={match} />
             ))}

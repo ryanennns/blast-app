@@ -7,3 +7,7 @@ export interface Match {
   team_b_score: number;
   winner: string;
 }
+
+export interface UploadApiResponse {
+  match: Match;
+}

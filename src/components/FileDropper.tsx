@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { DragEvent } from "react";
+import { API_BASE_URL } from "../const.ts";
+import type { UploadApiResponse } from "../types/core.ts";
 
 interface Props {
-  onApiResponse: (response: unknown) => void;
+  onApiResponse: (response: UploadApiResponse) => void;
 }
 
 export default function FileDropper({ onApiResponse }: Props) {
@@ -29,7 +31,7 @@ export default function FileDropper({ onApiResponse }: Props) {
     formData.append("logFile", file);
 
     try {
-      const response = await fetch("http://127.0.0.1:3900/upload", {
+      const response = await fetch(`${API_BASE_URL}/upload`, {
         method: "POST",
         body: formData,
       });
