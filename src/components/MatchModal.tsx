@@ -1,7 +1,7 @@
 import { X, Trophy, MapPin } from "lucide-react";
 import { useMount } from "react-use";
 import { API_BASE_URL } from "../const.ts";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Scoreboard } from "../types/core.ts";
 import { ScoreboardTable } from "./ScoreboardTable.tsx";
 import { ToggleButton } from "./ToggleButton.tsx";
@@ -23,7 +23,28 @@ interface Props {
 }
 
 export function MatchModal({ match, open, onClose }: Props) {
-  const [scoreboard, setScoreboard] = useState<Scoreboard | null>(null);
+  const fakeScoreboard = useMemo<Scoreboard>(() => {
+    const fakeScoreboardRow = {
+      player: "--",
+      team: "--",
+      kills: 0,
+      deaths: 0,
+      assists: 0,
+      flashAssists: 0,
+    };
+
+    const fakeRows = Array(10)
+      .fill(null)
+      .map(() => ({ ...fakeScoreboardRow }));
+
+    return {
+      id: "--",
+      matchId: "--",
+      scoreboardRows: fakeRows,
+    };
+  }, []);
+
+  const [scoreboard, setScoreboard] = useState<Scoreboard>(fakeScoreboard);
   const toggleButtonOptions = [
     { label: "Scoreboard", value: "scoreboard" },
     { label: "Timeline", value: "timeline" },
@@ -97,14 +118,16 @@ export function MatchModal({ match, open, onClose }: Props) {
             </div>
           </div>
 
-          <div>
-            <div className="p-2 max-w-2xl mx-auto">
-              <ScoreboardTable
-                scoreboard={scoreboard}
-                winningTeam={match.winner}
-              />
+          {activeTab === "scoreboard" && (
+            <div>
+              <div className="p-2 max-w-2xl mx-auto">
+                <ScoreboardTable
+                  scoreboard={scoreboard}
+                  winningTeam={match.winner}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

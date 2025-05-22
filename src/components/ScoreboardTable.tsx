@@ -12,7 +12,7 @@ interface Scoreboard {
 }
 
 interface Props {
-  scoreboard: Scoreboard | null;
+  scoreboard: Scoreboard;
   winningTeam: string;
 }
 
@@ -31,13 +31,7 @@ export function ScoreboardTable({ scoreboard, winningTeam }: Props) {
     return deaths === 0 ? kills.toFixed(1) : (kills / deaths).toFixed(1);
   };
 
-  return !scoreboard ? (
-    <div className="text-center text-gray-500 py-8">
-      <div className="animate-pulse">
-        <p>Loading scoreboard...</p>
-      </div>
-    </div>
-  ) : (
+  return (
     <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
       <table className="min-w-full bg-white">
         <thead className="bg-gray-50">
@@ -61,13 +55,13 @@ export function ScoreboardTable({ scoreboard, winningTeam }: Props) {
         <tbody className="divide-y divide-gray-200">
           {scoreboard.scoreboardRows
             .sort((a, b) => b.kills - a.kills)
-            .map((row) => {
+            .map((row, index) => {
               const isWinningTeam = row.team === winningTeam;
               const kd = getKDRatio(row.kills, row.deaths);
 
               return (
                 <tr
-                  key={row.player}
+                  key={row.player + index}
                   className={`hover:bg-gray-50 transition-colors ${
                     isWinningTeam
                       ? "bg-green-50 border-l-4 border-l-green-400"
