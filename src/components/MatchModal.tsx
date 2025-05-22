@@ -2,9 +2,10 @@ import { X, Trophy, MapPin } from "lucide-react";
 import { useMount } from "react-use";
 import { API_BASE_URL } from "../const.ts";
 import { useMemo, useState } from "react";
-import type { Scoreboard } from "../types/core.ts";
+import type { Round, Scoreboard } from "../types/core.ts";
 import { ScoreboardTable } from "./ScoreboardTable.tsx";
 import { ToggleButton } from "./ToggleButton.tsx";
+import { MatchTimeline } from "./MatchTimeline.tsx";
 
 interface Match {
   id: string;
@@ -45,6 +46,7 @@ export function MatchModal({ match, open, onClose }: Props) {
   }, []);
 
   const [scoreboard, setScoreboard] = useState<Scoreboard>(fakeScoreboard);
+  const [rounds, setRounds] = useState<Round[]>([]);
   const toggleButtonOptions = [
     { label: "Scoreboard", value: "scoreboard" },
     { label: "Timeline", value: "timeline" },
@@ -52,11 +54,18 @@ export function MatchModal({ match, open, onClose }: Props) {
   const [activeTab, setActiveTab] = useState("scoreboard");
 
   useMount(async () => {
-    const response = await fetch(
+    const scoreboardResponse = await fetch(
       `${API_BASE_URL}/matches/${match.id}/scoreboard`,
     );
-    const json = await response.json();
+    const json = await scoreboardResponse.json();
     setScoreboard(json.scoreboard);
+
+    const roundsResponse = await fetch(
+      `${API_BASE_URL}/matches/${match.id}/rounds`,
+    );
+
+    const roundsJson = await roundsResponse.json();
+    setRounds(roundsJson.rounds);
   });
 
   if (!open) {
@@ -67,7 +76,7 @@ export function MatchModal({ match, open, onClose }: Props) {
     <>
       <div className="fixed inset-0 bg-black/70 z-40" onClick={onClose} />
 
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex max-w-5xl m-auto items-center justify-center p-4">
         <div className="relative bg-white rounded-xl shadow-xl w-full p-6">
           <button
             onClick={onClose}
@@ -127,6 +136,12 @@ export function MatchModal({ match, open, onClose }: Props) {
                 />
               </div>
             </div>
+          )}
+
+          {activeTab === "timeline" && (
+            <>
+              <MatchTimeline rounds={rounds} />
+            </>
           )}
         </div>
       </div>

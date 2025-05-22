@@ -30,3 +30,35 @@ export interface UploadApiResponse {
 export interface ScoreboardApiResponse {
   scoreboard: Scoreboard;
 }
+
+export interface Kill {
+  killer: string;
+  killed: string;
+  weapon: string;
+  headshot: boolean;
+  order: number;
+}
+
+export interface Assist {
+  assister: string;
+  killed: string;
+  order: number;
+}
+
+export interface FlashAssist {
+  assister: string;
+  killed: string;
+  order: number;
+}
+
+export interface Round {
+  id: string;
+  number: number;
+  winner: "T" | "CT";
+  matchId: string;
+  halfId: string;
+  winMethod: "kills" | "defusal" | "bomb";
+  kills: Kill[];
+  assists: Assist[];
+  flashAssists: FlashAssist[];
+}

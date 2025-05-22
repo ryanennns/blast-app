@@ -1,15 +1,4 @@
-interface ScoreboardRow {
-  player: string;
-  team: string;
-  kills: number;
-  deaths: number;
-  assists: number;
-  flashAssists: number;
-}
-
-interface Scoreboard {
-  scoreboardRows: ScoreboardRow[];
-}
+import type { Scoreboard } from "../types/core.ts";
 
 interface Props {
   scoreboard: Scoreboard;
