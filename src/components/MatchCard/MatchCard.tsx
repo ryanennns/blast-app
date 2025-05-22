@@ -8,7 +8,10 @@ export function MatchCard({ match }: MatchCardProps) {
   const isTeamAWinner = match.winner === match.team_a;
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 max-w-md">
+    <div
+      className="hover:bg-gray-100 bg-white rounded-lg shadow-md hover:shadow-lg border border-gray-200 p-6 max-w-md transition-all duration-200 ease-in-out"
+      onClick={() => console.log(`Clicked on match: ${match.id}`)}
+    >
       <div className="text-center mb-4">
         <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
           {match.map.toUpperCase()}
@@ -62,4 +65,4 @@ export function MatchCard({ match }: MatchCardProps) {
       </div>
     </div>
   );
-};
+}
