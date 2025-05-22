@@ -63,15 +63,13 @@ export default function FileDropper({ onApiResponse }: Props) {
         )}
       </div>
 
-      {file && (
         <button
           onClick={handleUpload}
-          disabled={uploading}
+          disabled={uploading && !!file}
           className="mt-4 w-full bg-blue-600 dark:bg-blue-500 text-white dark:text-gray-900 px-4 py-2 rounded hover:bg-blue-700 dark:hover:bg-blue-600"
         >
           {uploading ? "Uploading..." : "Upload & Parse"}
         </button>
-      )}
     </div>
   );
 }
