@@ -3,9 +3,9 @@ import { useMount } from "react-use";
 import { useState } from "react";
 import type { Match, UploadApiResponse } from "../types/core.ts";
 import { MatchCard } from "../components/MatchCard.tsx";
-import { API_BASE_URL } from "../const.ts";
 import { MatchModal } from "../components/MatchModal.tsx";
 import { Footer } from "../components/Footer.tsx";
+import {getMatches} from "../services/ApiService.ts";
 
 export function Home() {
   const [matchesData, setMatchesData] = useState<Match[]>([]);
@@ -18,9 +18,14 @@ export function Home() {
 
   useMount(() => {
     const fetchMatches = async () => {
-      const response = await fetch(`${API_BASE_URL}/matches`);
-      const data = await response.json();
-      setMatchesData(data.matches);
+      const matches = await getMatches();
+
+      if (matches === undefined) {
+        // handle error
+        return;
+      }
+
+      setMatchesData(matches);
     };
 
     fetchMatches();
