@@ -5,6 +5,7 @@ import type { Match, UploadApiResponse } from "../types/core.ts";
 import { MatchCard } from "../components/MatchCard.tsx";
 import { API_BASE_URL } from "../const.ts";
 import { MatchModal } from "../components/MatchModal.tsx";
+import { Footer } from "../components/Footer.tsx";
 
 export function Home() {
   const [matchesData, setMatchesData] = useState<Match[]>([]);
@@ -13,7 +14,6 @@ export function Home() {
   const handleApiResponse = (response: UploadApiResponse) => {
     const newMatch = response.match;
     setMatchesData((prevMatches) => [...prevMatches, newMatch]);
-    console.log("New match added:", newMatch);
   };
 
   useMount(() => {
@@ -21,7 +21,6 @@ export function Home() {
       const response = await fetch(`${API_BASE_URL}/matches`);
       const data = await response.json();
       setMatchesData(data.matches);
-      console.log(data);
     };
 
     fetchMatches();
@@ -50,7 +49,7 @@ export function Home() {
           </div>
         </div>
 
-        {/*<Footer />*/}
+        <Footer />
 
         {selectedMatch && (
           <MatchModal

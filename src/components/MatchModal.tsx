@@ -98,7 +98,7 @@ export function MatchModal({ match, open, onClose }: Props) {
           </div>
 
           <div>
-            <div className="p-2 max-w-2xl mx-auto flex flex-row">
+            <div className="p-2 max-w-2xl mx-auto">
               <ScoreboardTable
                 scoreboard={scoreboard}
                 winningTeam={match.winner}
