@@ -5,9 +5,11 @@ import type { Match, UploadApiResponse } from "../types/core.ts";
 import { MatchCard } from "../components/MatchCard.tsx";
 import { MatchModal } from "../components/MatchModal.tsx";
 import { Footer } from "../components/Footer.tsx";
-import {getMatches} from "../services/ApiService.ts";
+import { getMatches } from "../services/ApiService.ts";
+import { useToast } from "../hooks/useToast.tsx";
 
 export function Home() {
+  const { showToast, Toast } = useToast();
   const [matchesData, setMatchesData] = useState<Match[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
@@ -19,12 +21,10 @@ export function Home() {
   useMount(() => {
     const fetchMatches = async () => {
       const matches = await getMatches();
-
-      if (matches === undefined) {
-        // handle error
+      if (!matches) {
+        showToast("Failed to fetch matches. Please try again.");
         return;
       }
-
       setMatchesData(matches);
     };
 
@@ -64,6 +64,8 @@ export function Home() {
           />
         )}
       </div>
+
+      <Toast />
     </>
   );
 }

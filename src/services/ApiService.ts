@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../const.ts";
-import type {Match, Round, Scoreboard} from "../types/core.ts";
+import type { Match, Round, Scoreboard } from "../types/core.ts";
 
 export const getMatches = async (): Promise<Match[] | undefined> => {
   try {
@@ -14,7 +14,7 @@ export const getMatches = async (): Promise<Match[] | undefined> => {
   } catch (e: unknown) {
     return undefined;
   }
-}
+};
 
 export const getMatchScoreboard = async (
   matchId: string,

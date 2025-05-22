@@ -6,6 +6,7 @@ import { ScoreboardTable } from "./ScoreboardTable.tsx";
 import { ToggleButton } from "./ToggleButton.tsx";
 import { MatchTimeline } from "./MatchTimeline.tsx";
 import { getMatchRounds, getMatchScoreboard } from "../services/ApiService.ts";
+import {useToast} from "../hooks/useToast.tsx";
 
 interface Match {
   id: string;
@@ -24,6 +25,8 @@ interface Props {
 }
 
 export function MatchModal({ match, open, onClose }: Props) {
+  const { showToast, Toast } = useToast();
+
   const fakeScoreboard = useMemo<Scoreboard>(() => {
     const fakeScoreboardRow = {
       player: "--",
@@ -58,7 +61,7 @@ export function MatchModal({ match, open, onClose }: Props) {
     const rounds = await getMatchRounds(match.id);
 
     if (scoreboard === undefined || rounds === undefined) {
-      // show an error here
+      showToast("Failed to fetch match data. Please try again.");
 
       return;
     }
@@ -144,6 +147,8 @@ export function MatchModal({ match, open, onClose }: Props) {
           )}
         </div>
       </div>
+
+      <Toast />
     </>
   );
 }
