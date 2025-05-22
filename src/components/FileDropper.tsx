@@ -29,7 +29,7 @@ export default function FileDropper({ onApiResponse }: Props) {
     formData.append("logFile", file);
 
     try {
-      const response = await fetch("http://localhost:3001/upload", {
+      const response = await fetch("http://127.0.0.1:3900/upload", {
         method: "POST",
         body: formData,
       });
