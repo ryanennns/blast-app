@@ -1,10 +1,14 @@
+import { useState } from "react";
 import type { Round } from "../types/core.ts";
+import {RoundDataContainer} from "./RoundDataContainer.tsx";
 
 interface Props {
   rounds: Round[];
 }
 
 export function MatchTimeline({ rounds }: Props) {
+  const [selectedRoundId, setSelectedRoundId] = useState<string | null>(null);
+
   const getWinMethodIcon = (method: string) => {
     switch (method) {
       case "kills":
@@ -33,14 +37,21 @@ export function MatchTimeline({ rounds }: Props) {
 
   const renderRow = (half: Round[]) => (
     <div className="flex gap-2 flex-wrap justify-center mb-4">
-      {half.map((round, i) => (
+      {half.map((round) => (
         <div
-          key={round.id || i}
-          className={`w-12 p-2 rounded-lg border text-center ${getTeamColor(round.winner)} hover:shadow transition-shadow`}
+          key={round.id}
+          onClick={() =>
+            setSelectedRoundId((prev) => (prev === round.id ? null : round.id))
+          }
+          className={`cursor-pointer w-12 p-2 rounded-lg border text-center ${getTeamColor(round.winner)} hover:shadow transition-shadow ${
+            selectedRoundId === round.id ? "ring-2 ring-gray-400" : ""
+          }`}
         >
           <div className="flex justify-between items-center mb-1 text-xs">
             <span
-              className={`px-1.5 py-0.5 rounded font-bold ${getTeamBadge(round.winner)}`}
+              className={`px-1.5 py-0.5 rounded font-bold ${getTeamBadge(
+                round.winner,
+              )}`}
             >
               {round.winner}
             </span>
@@ -56,13 +67,16 @@ export function MatchTimeline({ rounds }: Props) {
     </div>
   );
 
+  const selectedRound = rounds.find((r) => r.id === selectedRoundId);
+
   return (
     <div className="py-4">
-      <h3 className="text-center text-lg font-bold text-gray-800 mb-2">
-        Match Timeline
-      </h3>
-      {renderRow(firstHalf)}
-      {secondHalf.length > 0 && renderRow(secondHalf)}
+      {!selectedRound && renderRow(firstHalf)}
+      {!selectedRound && secondHalf.length > 0 && renderRow(secondHalf)}
+
+      {selectedRound && (
+        <RoundDataContainer  round={selectedRound} onExit={() => setSelectedRoundId(null)}/>
+      )}
     </div>
   );
 }
